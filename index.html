@@ -8,6 +8,76 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
   
   <style>
+    /* أنماط الصفحة التمهيدية */
+    .welcome-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0f0c29, #302b63);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+
+    .welcome-content {
+      max-width: 600px;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .welcome-title {
+      font-size: 2.5em;
+      color: #fff;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .instructions {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      margin: 20px 0;
+    }
+
+    .instructions-item {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      font-size: 1.1em;
+      color: #fff;
+    }
+
+    .instructions-item i {
+      margin-left: 10px;
+      font-size: 1.3em;
+      color: #6c5ce7;
+    }
+
+    .start-button {
+      background: linear-gradient(135deg, #6c5ce7, #a363d9);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 15px 40px;
+      font-size: 1.2em;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .start-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
+    }
+
+    /* أنماط الصفحة الرئيسية */
+    .main-content { display: none; }
+
     body {
       font-family: 'Arial', sans-serif;
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
@@ -246,57 +316,101 @@
   </style>
 </head>
 <body>
-  <h1>اختبار في حفظ القرآن</h1>
-  
-  <div>
-    <label for="rangeSelect">اختر سورة:</label>
-    <select id="rangeSelect" onchange="setRange()">
-      <option value="all">القرآن كامل</option>
-      <option value="surah">سورة معينة</option>
-    </select>
-    <div id="extraInput" style="margin-top: 10px;"></div>
-  </div>
+  <!-- الصفحة التمهيدية -->
+  <div class="welcome-screen">
+    <div class="welcome-content">
+      <h1 class="welcome-title">مرحبًا في اختبار حفظ القرآن</h1>
+      
+      <div class="instructions">
+        <div class="instructions-item">
+          <i class="fas fa-book-open"></i>
+        اختر سورة من القائمة أو اختر بالقرآن كامل
+        </div>
+        <div class="instructions-item">
+          <i class="fas fa-question-circle"></i>
+          اضغط على زر "سؤال جديد" لبدء سؤال جديد وذلك بعد انتهاء السؤال السابق
+          
+        </div>
+        <div class="instructions-item">
+          <i class="fas fa-check-circle"></i>
+          اختر "نعم" إذا كانت إجابتك صحيحة و"لا" إذا كانت خاطئة
+        </div>
+        <div class="instructions-item">
+          <i class="fas fa-sync-alt"></i>
+          يمكنك إعادة الاختبار أو إنهاؤه في أي وقت
+        </div>
+      </div>
 
-  <div class="verse-container" id="verseContainer">
-    <div class="verse-container-inner">
-      <p id="verseText">جاري التحميل...</p>
-      <small id="verseInfo"></small>
+      <button class="start-button" onclick="startApp()">
+        ابدأ الاختبار الآن <i class="fas fa-arrow-left"></i>
+      </button>
     </div>
   </div>
 
-  <div class="button-container">
-    <button onclick="previousVerse()"><i class="fas fa-arrow-left"></i> السابقة</button>
-    <button onclick="nextVerse()"><i class="fas fa-arrow-right"></i> التالية</button>
-    <button onclick="newQuestion()"><i class="fas fa-question-circle"></i> جديد</button>
-    <button onclick="showResetPopup()"><i class="fas fa-redo-alt"></i> إعادة</button>
-    <button class="end-button" onclick="showEndPopup()"><i class="fas fa-times-circle"></i> إنهاء الاختبار</button>
+  <!-- الصفحة الرئيسية -->
+  <div class="main-content">
+    <h1>اختبار في حفظ القرآن</h1>
+    
+    <div>
+      <label for="rangeSelect">اختر سورة:</label>
+      <select id="rangeSelect" onchange="setRange()">
+        <option value="all">القرآن كامل</option>
+        <option value="surah">سورة معينة</option>
+      </select>
+      <div id="extraInput" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="verse-container" id="verseContainer">
+      <div class="verse-container-inner">
+        <p id="verseText">جاري التحميل...</p>
+        <small id="verseInfo"></small>
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button onclick="previousVerse()"><i class="fas fa-arrow-left"></i> السابقة</button>
+      <button onclick="nextVerse()"><i class="fas fa-arrow-right"></i> التالية</button>
+      <button onclick="newQuestion()"><i class="fas fa-question-circle"></i> جديد</button>
+      <button onclick="showResetPopup()"><i class="fas fa-redo-alt"></i> إعادة</button>
+      <button class="end-button" onclick="showEndPopup()"><i class="fas fa-times-circle"></i> إنهاء الاختبار</button>
+    </div>
+
+    <div class="stats" id="statsContainer"></div>
+
+    <div class="popup" id="questionPopup">
+      <p>هل أجبت الإجابة الصحيحة؟</p>
+      <button onclick="recordAnswer(true)" style="background-color: #4CAF50; color: white;">نعم</button>
+      <button onclick="recordAnswer(false)" style="background-color: #f44336; color: white;">لا</button>
+    </div>
+
+    <div class="popup" id="endPopup">
+      <p>هل تريد إنهاء الاختبار؟</p>
+      <button onclick="endQuiz(true)" style="background-color: #4CAF50; color: white;">نعم</button>
+      <button onclick="closePopup()" style="background-color: #f44336; color: white;">لا</button>
+    </div>
+
+    <div class="popup" id="resetPopup">
+      <p>هل تريد إعادة الاختبار من البداية؟</p>
+      <button onclick="resetQuiz(true)" style="background-color: #4CAF50; color: white;">نعم</button>
+      <button onclick="closePopup()" style="background-color: #f44336; color: white;">لا</button>
+    </div>
+
+    <div id="overlay"></div>
+
+    <footer>© 2024 - اختبار حفظك لآيات القرآن</footer>
   </div>
-
-  <div class="stats" id="statsContainer"></div>
-
-  <div class="popup" id="questionPopup">
-    <p>هل أجبت الإجابة الصحيحة؟</p>
-    <button onclick="recordAnswer(true)" style="background-color: #4CAF50; color: white;">نعم</button>
-    <button onclick="recordAnswer(false)" style="background-color: #f44336; color: white;">لا</button>
-  </div>
-
-  <div class="popup" id="endPopup">
-    <p>هل تريد إنهاء الاختبار؟</p>
-    <button onclick="endQuiz(true)" style="background-color: #4CAF50; color: white;">نعم</button>
-    <button onclick="closePopup()" style="background-color: #f44336; color: white;">لا</button>
-  </div>
-
-  <div class="popup" id="resetPopup">
-    <p>هل تريد إعادة الاختبار من البداية؟</p>
-    <button onclick="resetQuiz(true)" style="background-color: #4CAF50; color: white;">نعم</button>
-    <button onclick="closePopup()" style="background-color: #f44336; color: white;">لا</button>
-  </div>
-
-  <div id="overlay"></div>
-
-  <footer>© 2024 - اختبار حفظك لآيات القرآن</footer>
 
   <script>
+    // دالة بدء التطبيق
+    function startApp() {
+      document.querySelector('.welcome-screen').style.opacity = '0';
+      setTimeout(() => {
+        document.querySelector('.welcome-screen').style.display = 'none';
+        document.querySelector('.main-content').style.display = 'block';
+      }, 500);
+    }
+
+    // باقي الدوال
     let verses = [];
     let filteredVerses = [];
     let currentVerseIndex = 0;
