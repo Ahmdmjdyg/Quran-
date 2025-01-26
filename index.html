@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار حفظ القرآن</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #ffffff;
+      text-align: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      margin-bottom: 30px;
+      color: #fff;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 3px;
+      background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+      animation: titleUnderline 3s ease-in-out infinite;
+    }
+
+    .verse-container {
+      background: rgba(255, 255, 255, 0.95);
+      color: #2c3e50;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      margin: 30px auto;
+      max-width: 700px;
+      position: relative;
+      transition: transform 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      perspective: 1000px;
+    }
+
+    .verse-container-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .verse-container:hover {
+      transform: translateY(-5px);
+    }
+
+    .verse-container p {
+      font-size: 1.8em;
+      line-height: 2.2;
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      position: relative;
+    }
+
+    .verse-container small {
+      display: block;
+      margin-top: 20px;
+      color: #e74c3c;
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+
+    .button-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      max-width: 600px;
+      margin: 25px auto;
+    }
+
+    .button-container button {
+      background: linear-gradient(135deg, #6c5ce7, #a363d9);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .button-container button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
+    }
+
+    .end-button {
+      grid-column: span 2;
+      background: linear-gradient(135deg, #ff6b6b, #ff4757) !important;
+      margin-top: 10px;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      color: #2c3e50;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      z-index: 1000;
+      min-width: 300px;
+      backdrop-filter: blur(10px);
+      border: 1px solid #6c5ce755;
+    }
+
+    .popup::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #6c5ce7, #a363d9, #6c5ce7);
+      z-index: -1;
+      border-radius: 22px;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      z-index: 999;
+    }
+
+    footer {
+      margin-top: 50px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95em;
+      padding: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    select {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #6c5ce7;
+      border-radius: 10px;
+      padding: 8px 15px;
+      font-size: 16px;
+      margin: 10px;
+      color: #2c3e50;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .stats {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 15px;
+      margin: 30px auto;
+      max-width: 500px;
+      backdrop-filter: blur(5px);
+    }
+
+    .stats p {
+      font-size: 1.2em;
+      margin: 10px 0;
+      color: #fff;
+      position: relative;
+      padding-left: 30px;
+    }
+
+    .stats p::before {
+      content: "•";
+      color: #6c5ce7;
+      font-size: 2em;
+      position: absolute;
+      left: 0;
+      top: -5px;
+    }
+
+    @keyframes flip {
+      from { transform: rotateY(0deg) }
+      to { transform: rotateY(360deg) }
+    }
+
+    @keyframes titleUnderline {
+      0%, 100% { width: 120px; }
+      50% { width: 150px; }
+    }
+
+    @media (max-width: 768px) {
+      .button-container {
+        gap: 10px;
+        max-width: 95%;
+      }
+      
+      .button-container button {
+        font-size: 14px;
+        padding: 12px 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8em;
+      }
+      
+      .verse-container {
+        padding: 20px;
+      }
+
+      .verse-container p {
+        font-size: 1.4em;
+      }
+
+      .button-container button {
+        font-size: 13px;
+        padding: 10px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>اختبار في حفظ القرآن</h1>
+  
+  <div>
+    <label for="rangeSelect">اختر سورة:</label>
+    <select id="rangeSelect" onchange="setRange()">
+      <option value="all">القرآن كامل</option>
+      <option value="surah">سورة معينة</option>
+    </select>
+    <div id="extraInput" style="margin-top: 10px;"></div>
+  </div>
+
+  <div class="verse-container" id="verseContainer">
+    <div class="verse-container-inner">
+      <p id="verseText">جاري التحميل...</p>
+      <small id="verseInfo"></small>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button onclick="previousVerse()"><i class="fas fa-arrow-left"></i> السابقة</button>
+    <button onclick="nextVerse()"><i class="fas fa-arrow-right"></i> التالية</button>
+    <button onclick="newQuestion()"><i class="fas fa-question-circle"></i> جديد</button>
+    <button onclick="showResetPopup()"><i class="fas fa-redo-alt"></i> إعادة</button>
+    <button class="end-button" onclick="showEndPopup()"><i class="fas fa-times-circle"></i> إنهاء الاختبار</button>
+  </div>
+
+  <div class="stats" id="statsContainer"></div>
+
+  <div class="popup" id="questionPopup">
+    <p>هل أجبت الإجابة الصحيحة؟</p>
+    <button onclick="recordAnswer(true)" style="background-color: #4CAF50; color: white;">نعم</button>
+    <button onclick="recordAnswer(false)" style="background-color: #f44336; color: white;">لا</button>
+  </div>
+
+  <div class="popup" id="endPopup">
+    <p>هل تريد إنهاء الاختبار؟</p>
+    <button onclick="endQuiz(true)" style="background-color: #4CAF50; color: white;">نعم</button>
+    <button onclick="closePopup()" style="background-color: #f44336; color: white;">لا</button>
+  </div>
+
+  <div class="popup" id="resetPopup">
+    <p>هل تريد إعادة الاختبار من البداية؟</p>
+    <button onclick="resetQuiz(true)" style="background-color: #4CAF50; color: white;">نعم</button>
+    <button onclick="closePopup()" style="background-color: #f44336; color: white;">لا</button>
+  </div>
+
+  <div id="overlay"></div>
+
+  <footer>© 2024 - اختبار حفظك لآيات القرآن</footer>
+
+  <script>
+    let verses = [];
+    let filteredVerses = [];
+    let currentVerseIndex = 0;
+    let correctAnswers = 0;
+    let totalQuestions = 0;
+
+    const surahNames = [
+      "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة",
+      "يونس", "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم",
+      "طه", "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص",
+      "العنكبوت", "الروم", "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص",
+      "الزمر", "غافر", "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد",
+      "الفتح", "الحجرات", "ق", "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة",
+      "الحديد", "المجادلة", "الحشر", "الممتحنة", "الصف", "الجمعة", "المنافقون", "التغابن",
+      "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج", "نوح", "الجن", "المزمل",
+      "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس", "التكوير", "الإنفطار",
+      "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد", "الشمس",
+      "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات",
+      "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون",
+      "النصر", "المسد", "الإخلاص", "الفلق", "الناس"
+    ];
+
+    fetch('quran_data.json')
+      .then(response => response.json())
+      .then(data => {
+        verses = data;
+        filteredVerses = verses;
+        loadRandomVerse();
+      });
+
+    function setRange() {
+      const rangeSelect = document.getElementById("rangeSelect").value;
+      const extraInput = document.getElementById("extraInput");
+
+      if (rangeSelect === "surah") {
+        const surahOptions = surahNames.map(surah => `<option value="${surah}">${surah}</option>`).join('');
+        extraInput.innerHTML = `
+          <label for="surahName">اختر السورة:</label>
+          <select id="surahName" onchange="filterBySurah()">
+            ${surahOptions}
+          </select>
+        `;
+        currentRange = "surah";
+      } else {
+        extraInput.innerHTML = "";
+        currentRange = "all";
+        filteredVerses = verses;
+        loadRandomVerse();
+      }
+    }
+
+    function filterBySurah() {
+      const selectedSurah = document.getElementById("surahName").value;
+      filteredVerses = verses.filter(verse => surahNames[verse.surah - 1] === selectedSurah);
+      loadRandomVerse();
+    }
+
+    function loadRandomVerse() {
+      if (filteredVerses.length > 0) {
+        currentVerseIndex = Math.floor(Math.random() * filteredVerses.length);
+        showVerse();
+        document.getElementById('verseContainer').classList.add('verse-flip');
+        setTimeout(() => {
+          document.getElementById('verseContainer').classList.remove('verse-flip');
+        }, 1000);
+      } else {
+        alert("لا توجد آيات ضمن النطاق المحدد.");
+      }
+    }
+
+    function showVerse() {
+      const verse = filteredVerses[currentVerseIndex];
+      document.getElementById('verseText').innerText = verse.text;
+      document.getElementById('verseInfo').innerText = `سورة: ${surahNames[verse.surah - 1]} - آية: ${verse.ayah}`;
+    }
+
+    function nextVerse() {
+      if (currentVerseIndex < filteredVerses.length - 1) {
+        currentVerseIndex++;
+        showVerse();
+      } else {
+        alert('وصلت إلى آخر الآيات.');
+      }
+    }
+
+    function previousVerse() {
+      if (currentVerseIndex > 0) {
+        currentVerseIndex--;
+        showVerse();
+      } else {
+        alert('هذه أول آية.');
+      }
+    }
+
+    function newQuestion() {
+      totalQuestions++;
+      loadRandomVerse();
+      document.getElementById('questionPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function recordAnswer(isCorrect) {
+      if (isCorrect) {
+        correctAnswers++;
+      }
+      closePopup();
+    }
+
+    function showEndPopup() {
+      document.getElementById('endPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function showResetPopup() {
+      document.getElementById('resetPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    function closePopup() {
+      document.getElementById('questionPopup').style.display = 'none';
+      document.getElementById('endPopup').style.display = 'none';
+      document.getElementById('resetPopup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function endQuiz(confirmEnd) {
+      if (confirmEnd) {
+        document.getElementById('statsContainer').innerHTML = `
+          <p>عدد الأسئلة: ${totalQuestions}</p>
+          <p>إجابات صحيحة: ${correctAnswers}</p>
+          <p>إجابات خاطئة: ${totalQuestions - correctAnswers}</p>
+        `;
+      }
+      closePopup();
+    }
+
+    function resetQuiz(confirmReset) {
+      if (confirmReset) {
+        correctAnswers = 0;
+        totalQuestions = 0;
+        document.getElementById('statsContainer').innerHTML = '';
+        filteredVerses = verses;
+        loadRandomVerse();
+      }
+      closePopup();
+    }
+  </script>
+</body>
+</html>
