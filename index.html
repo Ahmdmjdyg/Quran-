@@ -1,562 +1,517 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>اختبار حفظ القرآن</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
-  
-  <style>
-    /* أنماط الصفحة التمهيدية */
-    .welcome-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #0f0c29, #302b63);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      transition: opacity 0.5s ease;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>اختبار حفظ القرآن</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+    color: #1b5e20;
+    margin: 0; padding: 20px; text-align: center; min-height: 100vh;
+}
+.welcome-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #2e7d32, #4caf50);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    z-index: 1000; transition: opacity 0.5s ease;
+    color: #ffffff;
+}
+.welcome-title {
+    font-size: 2.8em; margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    color: #fffde7;
+}
+.instructions {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px; border-radius: 15px; max-width: 600px; margin: 0 20px 30px;
+    text-align: right; color: #2e7d32;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+.instructions-item { margin: 15px 0; font-size: 1.1em; display: flex; align-items: center; gap: 10px; }
+.instructions-item i { color: #ffd54f; font-size: 1.4em; }
+.start-button {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    border: none; color: white; font-size: 1.3em; padding: 15px 45px;
+    border-radius: 30px; cursor: pointer;
+    box-shadow: 0 5px 15px rgba(46, 125, 50, 0.6);
+    transition: all 0.3s ease;
+}
+.start-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(46, 125, 50, 0.8);
+    background: linear-gradient(135deg, #66bb6a, #388e3c);
+}
+.main-content {
+    display: none; max-width: 700px; margin: 0 auto;
+}
+h1 {
+    font-size: 2.5em;
+    color: #2e7d32;
+    text-shadow: 0 0 5px rgba(174, 213, 129, 0.5);
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 10px;
+}
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, #ffd54f, #aed581);
+    animation: titleUnderline 3s ease-in-out infinite;
+}
+@keyframes titleUnderline {
+    0%, 100% { width: 120px; }
+    50% { width: 150px; }
+}
+.verse-container {
+    background: #ffffff;
+    color: #1b5e20;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+    padding: 40px;
+    margin-bottom: 30px;
+    border: 2px solid #c5e1a5;
+    transition: transform 0.3s ease;
+    cursor: default;
+}
+.verse-container:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(76, 175, 80, 0.4); }
+.verse-container p {
+    font-size: 1.8em;
+    line-height: 2.2;
+    margin: 0;
+    font-weight: 600;
+    color: #33691e;
+}
+.verse-container small {
+    display: block;
+    margin-top: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #ff6f00;
+}
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+.button-container button {
+    background: linear-gradient(135deg, #66bb6a, #388e3c);
+    border: none;
+    border-radius: 12px;
+    padding: 15px 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(56, 142, 60, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+.button-container button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(56, 142, 60, 0.7);
+    background: linear-gradient(135deg, #81c784, #4caf50);
+}
+.end-button {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #ef5350, #c62828) !important;
+    box-shadow: 0 5px 15px rgba(198, 40, 40, 0.6) !important;
+}
+.end-button:hover {
+    background: linear-gradient(135deg, #f44336, #d32f2f) !important;
+    box-shadow: 0 8px 20px rgba(211, 47, 47, 0.7) !important;
+}
+select {
+    background: white;
+    border: 2px solid #81c784;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 1em;
+    color: #2e7d32;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 15px 0;
+}
+#extraInput select { width: 100%; }
+.stats {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    color: #1b5e20;
+    max-width: 500px;
+    margin: 0 auto 30px;
+    box-shadow: 0 4px 15px rgba(165, 214, 167, 0.5);
+}
+.stats p {
+    font-size: 1.2em;
+    margin: 10px 0;
+    position: relative;
+    padding-left: 30px;
+}
+.stats p::before {
+    content: "•";
+    color: #4caf50;
+    font-size: 2em;
+    position: absolute;
+    left: 0;
+    top: -5px;
+}
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    color: #2e7d32;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(76, 175, 80, 0.3);
+    text-align: center;
+    z-index: 1000;
+    min-width: 320px;
+    backdrop-filter: blur(10px);
+    border: 1px solid #a5d6a7;
+}
+.popup::before {
+    content: "";
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: linear-gradient(45deg, #81c784, #4caf50, #81c784);
+    z-index: -1;
+    border-radius: 22px;
+}
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(76, 175, 80, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+}
+#awardPopup {
+    display: none;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: #f1f8e9;
+    border-radius: 25px;
+    padding: 40px;
+    box-shadow: 0 15px 35px rgba(76, 175, 80, 0.5);
+    color: #2e7d32;
+    text-align: center;
+    z-index: 1100;
+    min-width: 320px;
+    user-select: none;
+    transition: all 0.4s ease;
+}
+#awardPopup.show {
+    display: block;
+    transform: translate(-50%, -50%) scale(1);
+}
+#awardPopup h2 {
+    font-size: 2.2em;
+    margin: 0 0 20px 0;
+    color: #33691e;
+}
+#awardPopup p {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+#awardPopup .award-icon {
+    font-size: 5em;
+    color: #4caf50;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
+#awardPopup button {
+    margin-top: 25px;
+    padding: 12px 30px;
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    background: #4caf50;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.5);
+    transition: all 0.3s ease;
+}
+#awardPopup button:hover {
+    background: #388e3c;
+    box-shadow: 0 8px 25px rgba(56, 142, 60, 0.7);
+}
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
     }
-
-    .welcome-content {
-      max-width: 600px;
-      padding: 30px;
-      text-align: center;
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
     }
-
-    .welcome-title {
-      font-size: 2.5em;
-      color: #fff;
-      margin-bottom: 30px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    .instructions {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 25px;
-      border-radius: 15px;
-      margin: 20px 0;
-    }
-
-    .instructions-item {
-      display: flex;
-      align-items: center;
-      margin: 15px 0;
-      font-size: 1.1em;
-      color: #fff;
-    }
-
-    .instructions-item i {
-      margin-left: 10px;
-      font-size: 1.3em;
-      color: #6c5ce7;
-    }
-
-    .start-button {
-      background: linear-gradient(135deg, #6c5ce7, #a363d9);
-      color: white;
-      border: none;
-      border-radius: 25px;
-      padding: 15px 40px;
-      font-size: 1.2em;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
-      transition: all 0.3s ease;
-    }
-
-    .start-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
-    }
-
-    /* أنماط الصفحة الرئيسية */
-    .main-content { display: none; }
-
-    body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      color: #ffffff;
-      text-align: center;
-      padding: 20px;
-      min-height: 100vh;
-    }
-
-    h1 {
-      font-size: 2.5em;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      margin-bottom: 30px;
-      color: #fff;
-      position: relative;
-      padding-bottom: 10px;
-    }
-
-    h1::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 120px;
-      height: 3px;
-      background: linear-gradient(90deg, #ff6b6b, #ffd93d);
-      animation: titleUnderline 3s ease-in-out infinite;
-    }
-
-    .verse-container {
-      background: rgba(255, 255, 255, 0.95);
-      color: #2c3e50;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      padding: 40px;
-      margin: 30px auto;
-      max-width: 700px;
-      position: relative;
-      transition: transform 0.3s ease;
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      perspective: 1000px;
-    }
-
-    .verse-container-inner {
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-      position: relative;
-    }
-
-    .verse-container:hover {
-      transform: translateY(-5px);
-    }
-
-    .verse-container p {
-      font-size: 1.8em;
-      line-height: 2.2;
-      margin: 0;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      position: relative;
-    }
-
-    .verse-container small {
-      display: block;
-      margin-top: 20px;
-      color: #e74c3c;
-      font-size: 1.1em;
-      font-weight: bold;
-    }
-
+}
+@media (max-width: 768px) {
     .button-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      max-width: 600px;
-      margin: 25px auto;
-    }
-
-    .button-container button {
-      background: linear-gradient(135deg, #6c5ce7, #a363d9);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      padding: 14px 20px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .button-container button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
-    }
-
-    .end-button {
-      grid-column: span 2;
-      background: linear-gradient(135deg, #ff6b6b, #ff4757) !important;
-      margin-top: 10px;
-    }
-
-    .popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: linear-gradient(145deg, #ffffff, #f8f9fa);
-      color: #2c3e50;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      z-index: 1000;
-      min-width: 300px;
-      backdrop-filter: blur(10px);
-      border: 1px solid #6c5ce755;
-    }
-
-    .popup::before {
-      content: "";
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, #6c5ce7, #a363d9, #6c5ce7);
-      z-index: -1;
-      border-radius: 22px;
-    }
-
-    #overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(5px);
-      z-index: 999;
-    }
-
-    footer {
-      margin-top: 50px;
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 0.95em;
-      padding: 20px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    select {
-      background: rgba(255, 255, 255, 0.9);
-      border: 2px solid #6c5ce7;
-      border-radius: 10px;
-      padding: 8px 15px;
-      font-size: 16px;
-      margin: 10px;
-      color: #2c3e50;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .stats {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 15px;
-      margin: 30px auto;
-      max-width: 500px;
-      backdrop-filter: blur(5px);
-    }
-
-    .stats p {
-      font-size: 1.2em;
-      margin: 10px 0;
-      color: #fff;
-      position: relative;
-      padding-left: 30px;
-    }
-
-    .stats p::before {
-      content: "•";
-      color: #6c5ce7;
-      font-size: 2em;
-      position: absolute;
-      left: 0;
-      top: -5px;
-    }
-
-    @keyframes flip {
-      from { transform: rotateY(0deg) }
-      to { transform: rotateY(360deg) }
-    }
-
-    @keyframes titleUnderline {
-      0%, 100% { width: 120px; }
-      50% { width: 150px; }
-    }
-
-    @media (max-width: 768px) {
-      .button-container {
-        gap: 10px;
+        grid-template-columns: 1fr;
         max-width: 95%;
-      }
-      
-      .button-container button {
-        font-size: 14px;
+    }
+    .button-container button {
+        font-size: 1em;
         padding: 12px 15px;
-      }
     }
-
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 1.8em;
-      }
-      
-      .verse-container {
-        padding: 20px;
-      }
-
-      .verse-container p {
-        font-size: 1.4em;
-      }
-
-      .button-container button {
-        font-size: 13px;
-        padding: 10px 12px;
-      }
-    }
-  </style>
+}
+@media (max-width: 480px) {
+    h1 { font-size: 1.8em; }
+    .verse-container { padding: 20px; }
+    .verse-container p { font-size: 1.4em; }
+    .button-container button { font-size: 0.9em; padding: 10px 12px; }
+}
+</style>
 </head>
 <body>
-  <!-- الصفحة التمهيدية -->
-  <div class="welcome-screen">
-    <div class="welcome-content">
-      <h1 class="welcome-title">مرحبًا في اختبار حفظ القرآن</h1>
-      
-      <div class="instructions">
-        <div class="instructions-item">
-          <i class="fas fa-book-open"></i>
-        اختر سورة من القائمة أو اختر بالقرآن كامل
-        </div>
-        <div class="instructions-item">
-          <i class="fas fa-question-circle"></i>
-          اضغط على زر "سؤال جديد" لبدء سؤال جديد وذلك بعد انتهاء السؤال السابق
-          
-        </div>
-        <div class="instructions-item">
-          <i class="fas fa-check-circle"></i>
-          اختر "نعم" إذا كانت إجابتك صحيحة و"لا" إذا كانت خاطئة
-        </div>
-        <div class="instructions-item">
-          <i class="fas fa-sync-alt"></i>
-          يمكنك إعادة الاختبار أو إنهاؤه في أي وقت
-        </div>
-      </div>
 
-      <button class="start-button" onclick="startApp()">
-        ابدأ الاختبار الآن <i class="fas fa-arrow-left"></i>
-      </button>
+<div class="welcome-screen">
+  <div class="welcome-content">
+    <h1 class="welcome-title">مرحبًا في اختبار حفظ القرآن</h1>
+    <div class="instructions">
+      <div class="instructions-item"><i class="fas fa-book-open"></i> اختر سورة من القائمة أو اختر بالقرآن كامل</div>
+      <div class="instructions-item"><i class="fas fa-question-circle"></i> اضغط على زر "سؤال جديد" لبدء سؤال جديد بعد انتهاء السؤال السابق</div>
+      <div class="instructions-item"><i class="fas fa-check-circle"></i> اختر "نعم" إذا كانت إجابتك صحيحة و"لا" إذا كانت خاطئة</div>
+      <div class="instructions-item"><i class="fas fa-sync-alt"></i> يمكنك إعادة الاختبار أو إنهاؤه في أي وقت</div>
     </div>
+    <button class="start-button" onclick="startApp()">ابدأ الاختبار الآن <i class="fas fa-arrow-left"></i></button>
+  </div>
+</div>
+
+<div class="main-content">
+  <h1>اختبار في حفظ القرآن</h1>
+
+  <label for="rangeSelect">اختر السورة:</label>
+  <select id="rangeSelect" onchange="setRange()">
+    <option value="all">القرآن كامل</option>
+    <option value="surah">سورة معينة</option>
+  </select>
+  <div id="extraInput"></div>
+
+  <div class="verse-container" id="verseContainer">
+    <p id="verseText">جاري التحميل...</p>
+    <small id="verseInfo"></small>
   </div>
 
-  <!-- الصفحة الرئيسية -->
-  <div class="main-content">
-    <h1>اختبار في حفظ القرآن</h1>
-    
-    <div>
-      <label for="rangeSelect">اختر سورة:</label>
-      <select id="rangeSelect" onchange="setRange()">
-        <option value="all">القرآن كامل</option>
-        <option value="surah">سورة معينة</option>
-      </select>
-      <div id="extraInput" style="margin-top: 10px;"></div>
-    </div>
-
-    <div class="verse-container" id="verseContainer">
-      <div class="verse-container-inner">
-        <p id="verseText">جاري التحميل...</p>
-        <small id="verseInfo"></small>
-      </div>
-    </div>
-
-    <div class="button-container">
-      <button onclick="previousVerse()"><i class="fas fa-arrow-left"></i> السابقة</button>
-      <button onclick="nextVerse()"><i class="fas fa-arrow-right"></i> التالية</button>
-      <button onclick="newQuestion()"><i class="fas fa-question-circle"></i> جديد</button>
-      <button onclick="showResetPopup()"><i class="fas fa-redo-alt"></i> إعادة</button>
-      <button class="end-button" onclick="showEndPopup()"><i class="fas fa-times-circle"></i> إنهاء الاختبار</button>
-    </div>
-
-    <div class="stats" id="statsContainer"></div>
-
-    <div class="popup" id="questionPopup">
-      <p>هل أجبت الإجابة الصحيحة؟</p>
-      <button onclick="recordAnswer(true)" style="background-color: #4CAF50; color: white;">نعم</button>
-      <button onclick="recordAnswer(false)" style="background-color: #f44336; color: white;">لا</button>
-    </div>
-
-    <div class="popup" id="endPopup">
-      <p>هل تريد إنهاء الاختبار؟</p>
-      <button onclick="endQuiz(true)" style="background-color: #4CAF50; color: white;">نعم</button>
-      <button onclick="closePopup()" style="background-color: #f44336; color: white;">لا</button>
-    </div>
-
-    <div class="popup" id="resetPopup">
-      <p>هل تريد إعادة الاختبار من البداية؟</p>
-      <button onclick="resetQuiz(true)" style="background-color: #4CAF50; color: white;">نعم</button>
-      <button onclick="closePopup()" style="background-color: #f44336; color: white;">لا</button>
-    </div>
-
-    <div id="overlay"></div>
-
-    <footer>© 2024 - اختبار حفظك لآيات القرآن</footer>
+  <div class="button-container">
+    <button onclick="previousVerse()"><i class="fas fa-arrow-left"></i> السابقة</button>
+    <button onclick="nextVerse()"><i class="fas fa-arrow-right"></i> التالية</button>
+    <button onclick="newQuestion()"><i class="fas fa-question-circle"></i> جديد</button>
+    <button onclick="showResetPopup()"><i class="fas fa-redo-alt"></i> إعادة</button>
+    <button class="end-button" onclick="showEndPopup()"><i class="fas fa-times-circle"></i> إنهاء الاختبار</button>
   </div>
 
-  <script>
-    // دالة بدء التطبيق
-    function startApp() {
-      document.querySelector('.welcome-screen').style.opacity = '0';
-      setTimeout(() => {
-        document.querySelector('.welcome-screen').style.display = 'none';
-        document.querySelector('.main-content').style.display = 'block';
-      }, 500);
-    }
+  <div class="stats" id="statsContainer"></div>
+</div>
 
-    // باقي الدوال
-    let verses = [];
-    let filteredVerses = [];
-    let currentVerseIndex = 0;
-    let correctAnswers = 0;
-    let totalQuestions = 0;
+<!-- النوافذ المنبثقة -->
+<div class="popup" id="questionPopup">
+  <p>هل أجبت الإجابة الصحيحة؟</p>
+  <button onclick="recordAnswer(true)" style="background-color: #4CAF50; color: white;">نعم</button>
+  <button onclick="recordAnswer(false)" style="background-color: #f44336; color: white;">لا</button>
+</div>
 
-    const surahNames = [
-      "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة",
-      "يونس", "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم",
-      "طه", "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص",
-      "العنكبوت", "الروم", "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص",
-      "الزمر", "غافر", "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد",
-      "الفتح", "الحجرات", "ق", "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة",
-      "الحديد", "المجادلة", "الحشر", "الممتحنة", "الصف", "الجمعة", "المنافقون", "التغابن",
-      "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج", "نوح", "الجن", "المزمل",
-      "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس", "التكوير", "الإنفطار",
-      "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد", "الشمس",
-      "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات",
-      "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون",
-      "النصر", "المسد", "الإخلاص", "الفلق", "الناس"
-    ];
+<div class="popup" id="endPopup">
+  <p>هل تريد إنهاء الاختبار؟</p>
+  <button onclick="endQuiz(true)" style="background-color: #4CAF50; color: white;">نعم</button>
+  <button onclick="closePopup()" style="background-color: #f44336; color: white;">لا</button>
+</div>
 
-    fetch('quran_data.json')
-      .then(response => response.json())
-      .then(data => {
-        verses = data;
-        filteredVerses = verses;
-        loadRandomVerse();
-      });
+<div class="popup" id="resetPopup">
+  <p>هل تريد إعادة الاختبار من البداية؟</p>
+  <button onclick="resetQuiz(true)" style="background-color: #4CAF50; color: white;">نعم</button>
+  <button onclick="closePopup()" style="background-color: #f44336; color: white;">لا</button>
+</div>
 
-    function setRange() {
-      const rangeSelect = document.getElementById("rangeSelect").value;
-      const extraInput = document.getElementById("extraInput");
+<div id="overlay"></div>
 
-      if (rangeSelect === "surah") {
-        const surahOptions = surahNames.map(surah => `<option value="${surah}">${surah}</option>`).join('');
-        extraInput.innerHTML = `
-          <label for="surahName">اختر السورة:</label>
-          <select id="surahName" onchange="filterBySurah()">
-            ${surahOptions}
-          </select>
-        `;
-        currentRange = "surah";
-      } else {
-        extraInput.innerHTML = "";
-        currentRange = "all";
-        filteredVerses = verses;
-        loadRandomVerse();
-      }
-    }
+<div id="awardPopup">
+  <div class="award-icon"><i class="fas fa-trophy"></i></div>
+  <h2>تهانينا!</h2>
+  <p>لقد أنهيت اختبار حفظ القرآن.</p>
+  <p id="awardStats"></p>
+  <button onclick="closeAward()">إغلاق</button>
+</div>
 
-    function filterBySurah() {
-      const selectedSurah = document.getElementById("surahName").value;
-      filteredVerses = verses.filter(verse => surahNames[verse.surah - 1] === selectedSurah);
+<script>
+  // بيانات سورة بأسماء آيات (يجب استبدال هذا بالبيانات الفعلية من quran_data.json)
+  let verses = [];
+  const surahNames = [
+    "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة",
+    "يونس", "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم",
+    "طه", "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص",
+    "العنكبوت", "الروم", "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص",
+    "الزمر", "غافر", "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد",
+    "الفتح", "الحجرات", "ق", "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة",
+    "الحديد", "المجادلة", "الحشر", "الممتحنة", "الصف", "الجمعة", "المنافقون", "التغابن",
+    "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج", "نوح", "الجن", "المزمل",
+    "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس", "التكوير", "الإنفطار",
+    "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد", "الشمس",
+    "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات",
+    "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون",
+    "النصر", "المسد", "الإخلاص", "الفلق", "الناس"
+  ];
+  let filteredVerses = [];
+  let currentVerseIndex = 0;
+  let correctAnswers = 0;
+  let totalQuestions = 0;
+  let currentRange = "all";
+
+  // تحميل بيانات الآيات من ملف JSON (تأكد توافر quran_data.json بنفس المسار)
+  fetch('quran_data.json')
+    .then(res => res.json())
+    .then(data => {
+      verses = data;
+      filteredVerses = verses;
+      loadRandomVerse();
+    });
+
+  function startApp() {
+    document.querySelector('.welcome-screen').style.opacity = '0';
+    setTimeout(() => {
+      document.querySelector('.welcome-screen').style.display = 'none';
+      document.querySelector('.main-content').style.display = 'block';
+    }, 500);
+  }
+
+  function setRange() {
+    const rangeSelect = document.getElementById("rangeSelect").value;
+    const extraInput = document.getElementById("extraInput");
+    currentRange = rangeSelect;
+
+    if (rangeSelect === "surah") {
+      const surahOptions = surahNames.map(surah => `<option value="${surah}">${surah}</option>`).join('');
+      extraInput.innerHTML = `<label for="surahName">اختر السورة:</label>
+          <select id="surahName" onchange="filterBySurah()">${surahOptions}</select>`;
+      filteredVerses = verses;
+    } else {
+      extraInput.innerHTML = '';
+      filteredVerses = verses;
       loadRandomVerse();
     }
+  }
 
-    function loadRandomVerse() {
-      if (filteredVerses.length > 0) {
-        currentVerseIndex = Math.floor(Math.random() * filteredVerses.length);
-        showVerse();
-        document.getElementById('verseContainer').classList.add('verse-flip');
-        setTimeout(() => {
-          document.getElementById('verseContainer').classList.remove('verse-flip');
-        }, 1000);
-      } else {
-        alert("لا توجد آيات ضمن النطاق المحدد.");
-      }
-    }
+  function filterBySurah() {
+    const selectedSurah = document.getElementById("surahName").value;
+    filteredVerses = verses.filter(v => surahNames[v.surah - 1] === selectedSurah);
+    loadRandomVerse();
+  }
 
-    function showVerse() {
-      const verse = filteredVerses[currentVerseIndex];
-      document.getElementById('verseText').innerText = verse.text;
-      document.getElementById('verseInfo').innerText = `سورة: ${surahNames[verse.surah - 1]} - آية: ${verse.ayah}`;
+  function loadRandomVerse() {
+    if (filteredVerses.length === 0) {
+      alert("لا توجد آيات ضمن النطاق المحدد.");
+      return;
     }
+    currentVerseIndex = Math.floor(Math.random() * filteredVerses.length);
+    showVerse();
+  }
 
-    function nextVerse() {
-      if (currentVerseIndex < filteredVerses.length - 1) {
-        currentVerseIndex++;
-        showVerse();
-      } else {
-        alert('وصلت إلى آخر الآيات.');
-      }
-    }
+  function showVerse() {
+    const verse = filteredVerses[currentVerseIndex];
+    document.getElementById('verseText').innerText = verse.text;
+    document.getElementById('verseInfo').innerText = `سورة: ${surahNames[verse.surah - 1]} - آية: ${verse.ayah}`;
+  }
 
-    function previousVerse() {
-      if (currentVerseIndex > 0) {
-        currentVerseIndex--;
-        showVerse();
-      } else {
-        alert('هذه أول آية.');
-      }
+  function nextVerse() {
+    if (currentVerseIndex < filteredVerses.length - 1) {
+      currentVerseIndex++;
+      showVerse();
+    } else {
+      alert('وصلت إلى آخر الآيات.');
     }
+  }
 
-    function newQuestion() {
-      totalQuestions++;
-      loadRandomVerse();
-      document.getElementById('questionPopup').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
+  function previousVerse() {
+    if (currentVerseIndex > 0) {
+      currentVerseIndex--;
+      showVerse();
+    } else {
+      alert('هذه أول آية.');
     }
+  }
 
-    function recordAnswer(isCorrect) {
-      if (isCorrect) {
-        correctAnswers++;
-      }
-      closePopup();
-    }
+  function newQuestion() {
+    totalQuestions++;
+    loadRandomVerse();
+    showPopup('questionPopup');
+  }
 
-    function showEndPopup() {
-      document.getElementById('endPopup').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
+  function recordAnswer(isCorrect) {
+    if (isCorrect) {
+      correctAnswers++;
     }
+    closePopup();
+  }
 
-    function showResetPopup() {
-      document.getElementById('resetPopup').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
-    }
+  function showPopup(id) {
+    document.getElementById(id).style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+  }
 
-    function closePopup() {
-      document.getElementById('questionPopup').style.display = 'none';
-      document.getElementById('endPopup').style.display = 'none';
-      document.getElementById('resetPopup').style.display = 'none';
-      document.getElementById('overlay').style.display = 'none';
-    }
+  function closePopup() {
+    ['questionPopup', 'endPopup', 'resetPopup'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+    document.getElementById('overlay').style.display = 'none';
+  }
 
-    function endQuiz(confirmEnd) {
-      if (confirmEnd) {
-        document.getElementById('statsContainer').innerHTML = `
-          <p>عدد الأسئلة: ${totalQuestions}</p>
-          <p>إجابات صحيحة: ${correctAnswers}</p>
-          <p>إجابات خاطئة: ${totalQuestions - correctAnswers}</p>
-        `;
-      }
-      closePopup();
-    }
+  function showEndPopup() {
+    showPopup('endPopup');
+  }
 
-    function resetQuiz(confirmReset) {
-      if (confirmReset) {
-        correctAnswers = 0;
-        totalQuestions = 0;
-        document.getElementById('statsContainer').innerHTML = '';
-        filteredVerses = verses;
-        loadRandomVerse();
-      }
-      closePopup();
-    }
-  </script>
+  function showResetPopup() {
+    showPopup('resetPopup');
+  }
+
+  function endQuiz(confirm) {
+    if (!confirm) return closePopup();
+    closePopup();
+    document.getElementById('statsContainer').innerHTML = `
+      <p>عدد الأسئلة: ${totalQuestions}</p>
+      <p>إجابات صحيحة: ${correctAnswers}</p>
+      <p>إجابات خاطئة: ${totalQuestions - correctAnswers}</p>
+    `;
+    // عرض الجائزة
+    const award = document.getElementById('awardPopup');
+    document.getElementById('awardStats').innerHTML = `
+      <p>عدد الأسئلة: ${totalQuestions}</p>
+      <p>إجابات صحيحة: ${correctAnswers}</p>
+      <p>إجابات خاطئة: ${totalQuestions - correctAnswers}</p>
+    `;
+    award.classList.add('show');
+    document.getElementById('overlay').style.display = 'block';
+  }
+
+  function closeAward() {
+    document.getElementById('awardPopup').classList.remove('show');
+    document.getElementById('overlay').style.display = 'none';
+  }
+
+  function resetQuiz(confirm) {
+    if (!confirm) return closePopup();
+    correctAnswers = 0;
+    totalQuestions = 0;
+    document.getElementById('statsContainer').innerHTML = '';
+    filteredVerses = verses;
+    loadRandomVerse();
+    closePopup();
+  }
+</script>
+
 </body>
 </html>
